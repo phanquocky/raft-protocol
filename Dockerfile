@@ -11,7 +11,7 @@ ENV GO111MODULE=on \
 WORKDIR /app
 
 # Copy go.mod and go.sum for dependency installation
-COPY go.mod go.sum ./
+COPY go.mod  ./
 
 # Download and cache dependencies
 RUN go mod download
@@ -19,8 +19,11 @@ RUN go mod download
 # Copy the entire project
 COPY . .
 
-# Build the application
-RUN go run main.go
+# Build the Go application
+RUN go build -o server .
 
-# Expose the port your gRPC server listens on
-EXPOSE 8080
+# Expose the server port
+EXPOSE 1234
+
+# Set the default command to run the server
+CMD ["./server"]

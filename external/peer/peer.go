@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-var PeerIPs = []string{"192.168.0.1", "192.168.0.2", "192.168.0.3", "192.168.0.4", "192.168.0.5"}
+// hard code these IPs for now in docker-compose.yml file
+var PeerIPs = []string{"192.168.1.101", "192.168.1.102", "192.168.1.103", "192.168.1.104", "192.168.1.105"}
 
 func init() {
 	peerIps := make([]string, 0)

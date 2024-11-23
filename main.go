@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/http"
 	"net/rpc"
+	"raft/external/peer"
 )
 
 type Args struct {
@@ -42,5 +43,7 @@ func main() {
 	}
 
 	log.Println("Server started ...")
+	log.Println(peer.PeerIPs)
 	http.Serve(l, nil)
+
 }

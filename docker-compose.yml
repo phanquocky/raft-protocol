@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raftserver1
+    networks:
+      raft_network:
+        ipv4_address: 192.168.1.101
+    environment:
+      - SERVER_IP=192.168.1.101
+
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raftserver2
+    networks:
+      raft_network:
+        ipv4_address: 192.168.1.102
+    environment:
+      - SERVER_IP=192.168.1.102
+
+  server3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raftserver3
+    networks:
+      raft_network:
+        ipv4_address: 192.168.1.103
+    environment:
+      - SERVER_IP=192.168.1.103
+
+  server4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raftserver4
+    networks:
+      raft_network:
+        ipv4_address: 192.168.1.104
+    environment:
+      - SERVER_IP=192.168.1.104
+
+  server5:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: raftserver5
+    networks:
+      raft_network:
+        ipv4_address: 192.168.1.105
+    environment:
+      - SERVER_IP=192.168.1.105
+
+networks:
+  raft_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
