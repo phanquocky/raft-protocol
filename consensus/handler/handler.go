@@ -1,4 +1,6 @@
-package handler
+package consensus
+
+import "raft/consensus/state"
 
 // Only methods that satisfy these criteria will be made available for remote access; other methods will be ignored:
 
@@ -8,5 +10,14 @@ package handler
 // the method's second argument is a pointer.
 // the method has return type error.
 
-type handler struct {
+type Handler struct {
+	state *state.State
+}
+
+func New() *Handler {
+	handler := &Handler{
+		state: state.New(),
+	}
+
+	return handler
 }

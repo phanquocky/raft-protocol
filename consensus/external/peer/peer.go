@@ -15,7 +15,7 @@ func init() {
 	log.Println("Server IP: ", os.Getenv("SERVER_IP"))
 
 	for _, ip := range PeerIPs {
-		if !strings.EqualFold(ip, os.Getenv("SERVER_IP")) {
+		if !strings.EqualFold(ip, os.Getenv("SERVER_IP")) { // remove the IP of server itself, it is configured in docker-compose.yml
 			peerIps = append(peerIps, ip)
 		}
 	}

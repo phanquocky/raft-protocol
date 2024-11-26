@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/rpc"
+	consensus "raft/consensus/handler"
 )
 
-type Args struct {
-	A, B int
-}
+// type BroadcastInput struct {
+// 	Message string
+// }
 
 func main() {
 
@@ -18,11 +19,13 @@ func main() {
 	}
 
 	// Synchronous call
-	args := &Args{7, 8}
+	input := &consensus.BroadcastInput{
+		Message: "Hello",
+	}
 	var reply int
-	err = client.Call("Arith.Multiply", args, &reply)
+	err = client.Call("Handler.Broadcast", input, &reply)
 	if err != nil {
 		log.Fatal("arith error:", err)
 	}
-	fmt.Printf("Arith: %d*%d=%d", args.A, args.B, reply)
+	fmt.Printf("Broadcast... Success %d", reply)
 }
