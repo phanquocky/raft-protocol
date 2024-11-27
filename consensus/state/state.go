@@ -1,6 +1,9 @@
 package state
 
+import "os"
+
 type State struct {
+	id         string // using ip address like server ID
 	persistent *PersistentState
 	volatile   *VolatileState
 }
@@ -19,8 +22,22 @@ func (s *State) GetVolatile() *VolatileState {
 	return nil
 }
 
+func (s *State) GetID() string {
+	if s != nil {
+		return s.id
+	}
+	return ""
+}
+
+func (s *State) SetID(id string) {
+	if s != nil {
+		s.id = id
+	}
+}
+
 func New() *State {
 	return &State{
+		id:         os.Getenv("SERVER_IP"), // using ip address like server ID
 		persistent: newPersistentState(),
 		volatile:   NewVolatileState(),
 	}
@@ -38,7 +55,7 @@ const (
 type PersistentState struct {
 	state       Role
 	currentTerm int
-	votedFor    int
+	votedFor    string
 	log         []int
 }
 
@@ -46,7 +63,7 @@ func newPersistentState() *PersistentState {
 	return &PersistentState{
 		state:       Follower,
 		currentTerm: 0,
-		votedFor:    -1,
+		votedFor:    "",
 		log:         []int{},
 	}
 }
@@ -65,11 +82,17 @@ func (p *PersistentState) GetCurrentTerm() int {
 	return 0
 }
 
-func (p *PersistentState) GetVotedFor() int {
+func (p *PersistentState) SetCurrentTerm(term int) {
+	if p != nil {
+		p.currentTerm = term
+	}
+}
+
+func (p *PersistentState) GetVotedFor() string {
 	if p != nil {
 		return p.votedFor
 	}
-	return -1
+	return ""
 }
 
 func (p *PersistentState) GetLog() []int {
@@ -77,6 +100,24 @@ func (p *PersistentState) GetLog() []int {
 		return p.log
 	}
 	return []int{}
+}
+
+func (p *PersistentState) SetState(state Role) {
+	if p != nil {
+		p.state = state
+	}
+}
+
+func (p *PersistentState) IncrementCurrentTerm() {
+	if p != nil {
+		p.currentTerm++
+	}
+}
+
+func (p *PersistentState) SetVotedFor(votedFor string) {
+	if p != nil {
+		p.votedFor = votedFor
+	}
 }
 
 // VolatileState is the state that need not be saved to stable storage

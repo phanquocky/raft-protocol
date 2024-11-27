@@ -11,6 +11,8 @@ services:
         ipv4_address: 192.168.1.101
     environment:
       - SERVER_IP=192.168.1.101
+    expose:
+      - 1234
 
   server2:
     build:
@@ -22,6 +24,8 @@ services:
         ipv4_address: 192.168.1.102
     environment:
       - SERVER_IP=192.168.1.102
+    expose:
+      - 1234
 
   server3:
     build:
@@ -33,6 +37,8 @@ services:
         ipv4_address: 192.168.1.103
     environment:
       - SERVER_IP=192.168.1.103
+    expose:
+      - 1234
 
   server4:
     build:
@@ -44,6 +50,8 @@ services:
         ipv4_address: 192.168.1.104
     environment:
       - SERVER_IP=192.168.1.104
+    expose:
+      - 1234
 
   server5:
     build:
@@ -55,6 +63,8 @@ services:
         ipv4_address: 192.168.1.105
     environment:
       - SERVER_IP=192.168.1.105
+    expose:
+      - 1234
 
 networks:
   raft_network:

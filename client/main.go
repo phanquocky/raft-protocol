@@ -28,4 +28,17 @@ func main() {
 		log.Fatal("arith error:", err)
 	}
 	fmt.Printf("Broadcast... Success %d", reply)
+
+	requestInput := &consensus.RequestVoteInput{
+		Term:        1,
+		CandidateId: "1",
+	}
+	var requestOutput consensus.RequestVoteOutput
+	err = client.Call("Handler.RequestVote", requestInput, &requestOutput)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
+
+	log.Printf("RequestVote... Success %v", requestOutput)
+
 }

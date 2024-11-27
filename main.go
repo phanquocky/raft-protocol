@@ -7,6 +7,7 @@ import (
 	"net/rpc"
 	"raft/consensus/external/peer"
 	consensus "raft/consensus/handler"
+	"time"
 )
 
 // type Args struct {
@@ -35,8 +36,17 @@ import (
 
 func main() {
 	handler := consensus.New()
+	log.Println("Start Consensus Handler")
+	handler.Start()
 	rpc.Register(handler)
 	rpc.HandleHTTP()
+
+	go func() {
+		time.Sleep(1000) // wait for other servers to start
+		log.Println("Connecting to peers ...")
+		peer.ConnectPeers()
+	}()
+
 	l, err := net.Listen("tcp", ":1234")
 	if err != nil {
 		log.Fatal("listen error:", err)

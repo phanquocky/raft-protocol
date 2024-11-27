@@ -11,7 +11,9 @@ import "raft/consensus/state"
 // the method has return type error.
 
 type Handler struct {
-	state *state.State
+	state              *state.State
+	leaderHeartbeat    chan struct{}
+	resetElectionTimer chan struct{}
 }
 
 func New() *Handler {
@@ -20,4 +22,11 @@ func New() *Handler {
 	}
 
 	return handler
+}
+
+func (h *Handler) Start() {
+	go h.LeaderElection()
+
+	// case Leader will start sending heartbeat periodically
+	go h.sendPeriodicHeartbeats()
 }
