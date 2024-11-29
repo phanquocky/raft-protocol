@@ -41,4 +41,18 @@ func main() {
 
 	log.Printf("RequestVote... Success %v", requestOutput)
 
+	appendEntriesInput := &consensus.AppendEntriesInput{
+		Term:     1,
+		LeaderId: "1",
+		Entries:  []int{},
+	}
+
+	var appendEntriesOutput consensus.AppendEntriesOutput
+	err = client.Call("Handler.AppendEntries", appendEntriesInput, &appendEntriesOutput)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
+
+	log.Printf("AppendEntries... Success %v", appendEntriesOutput)
+
 }

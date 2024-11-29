@@ -18,7 +18,9 @@ type Handler struct {
 
 func New() *Handler {
 	handler := &Handler{
-		state: state.New(),
+		state:              state.New(),
+		leaderHeartbeat:    make(chan struct{}, 10),
+		resetElectionTimer: make(chan struct{}, 10),
 	}
 
 	return handler

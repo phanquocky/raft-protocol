@@ -16,13 +16,15 @@ type AppendEntriesOutput struct {
 	Success bool
 }
 
-func (h *Handler) AppendEntries(input *AppendEntriesInput, reply *AppendEntriesOutput) {
+func (h *Handler) AppendEntries(input *AppendEntriesInput, reply *AppendEntriesOutput) error {
 	// Case no log entries, this is a heartbeat
 	if len(input.Entries) == 0 {
 		reply.Term = h.state.GetPersistent().GetCurrentTerm()
 		reply.Success = true
 		log.Println("[AppendEntries] Received heartbeat from leader")
 		h.leaderHeartbeat <- struct{}{}
-		return
+		return nil
 	}
+
+	return nil
 }
