@@ -18,7 +18,7 @@ func main() {
 	rpc.HandleHTTP()
 
 	go func() {
-		time.Sleep(1000) // wait for other servers to start
+		time.Sleep(5 * time.Second) // wait for other servers to start
 		log.Println("Connecting to peers ...")
 		peer.ConnectPeers()
 	}()

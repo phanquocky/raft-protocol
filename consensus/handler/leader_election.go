@@ -24,6 +24,9 @@ func (h *Handler) LeaderElection() {
 
 		select {
 		case <-timer.C:
+			if h.state.GetPersistent().GetState() == state.Leader {
+				continue
+			}
 			// start election
 			log.Println("[LeaderElection] Election timeout reached, starting election")
 			go h.startElection()
