@@ -32,7 +32,7 @@ func (h *Handler) LeaderElection() {
 			go h.startElection()
 		case <-h.leaderHeartbeat:
 			// reset timer
-			log.Println("[LeaderElection] Received heartbeat from leader, resetting election timeout")
+			// log.Println("[LeaderElection] Received heartbeat from leader, resetting election timeout")
 			timer.Stop()
 		case <-h.resetElectionTimer:
 			// reset timer
@@ -88,7 +88,7 @@ func (h *Handler) startElection() {
 		}
 	}
 
-	log.Println("[LeaderElection] Total votes received: ", votes)
+	// log.Println("[LeaderElection] Total votes received: ", votes)
 	// 7. If votes received from majority of servers: become leader
 	if votes > len(peer.PeerIPs)/2 {
 		log.Println("[LeaderElection] Majority votes received, becoming leader")
@@ -105,7 +105,7 @@ func (h *Handler) sendPeriodicHeartbeats() {
 	for {
 		time.Sleep(1000 * time.Millisecond)
 		if h.state.GetPersistent().GetState() == state.Leader {
-			log.Println("[sendPeriodicHeartbeats] Sending heartbeat to followers")
+			// log.Println("[sendPeriodicHeartbeats] Sending heartbeat to followers")
 			// send heartbeat to all followers
 			for _, p := range peer.PeerIPs {
 				go func(p string) {
@@ -113,7 +113,6 @@ func (h *Handler) sendPeriodicHeartbeats() {
 					err := peer.GetRPC(p).Call("Handler.AppendEntries", &AppendEntriesInput{
 						Term:     h.state.GetPersistent().GetCurrentTerm(),
 						LeaderId: h.state.GetID(),
-						Entries:  []int{},
 					}, output)
 					if err != nil {
 						log.Printf("[sendPeriodicHeartbeats] Error sending heartbeat to %s: %v\n", p, err)

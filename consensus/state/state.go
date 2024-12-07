@@ -8,6 +8,12 @@ type State struct {
 	volatile   *VolatileState
 }
 
+type Log struct {
+	Command string
+	Index   int
+	Term    int
+}
+
 func (s *State) GetPersistent() *PersistentState {
 	if s != nil {
 		return s.persistent
@@ -56,7 +62,7 @@ type PersistentState struct {
 	state       Role
 	currentTerm int
 	votedFor    string
-	log         []int
+	log         []Log
 }
 
 func newPersistentState() *PersistentState {
@@ -64,7 +70,7 @@ func newPersistentState() *PersistentState {
 		state:       Follower,
 		currentTerm: 0,
 		votedFor:    "",
-		log:         []int{},
+		log:         []Log{{Command: "", Index: 0, Term: 0}}, // dummy log entry at index 0, using 1-based indexing
 	}
 }
 
@@ -95,11 +101,11 @@ func (p *PersistentState) GetVotedFor() string {
 	return ""
 }
 
-func (p *PersistentState) GetLog() []int {
+func (p *PersistentState) GetLog() []Log {
 	if p != nil {
 		return p.log
 	}
-	return []int{}
+	return []Log{}
 }
 
 func (p *PersistentState) SetState(state Role) {
@@ -120,10 +126,67 @@ func (p *PersistentState) SetVotedFor(votedFor string) {
 	}
 }
 
+func (p *PersistentState) AppendLog(log Log) {
+	if p != nil {
+		p.log = append(p.log, log)
+	}
+}
+
+func (p *PersistentState) GetLastLogIndex() int {
+	if p != nil {
+		return len(p.log) - 1
+	}
+	return 0
+}
+
+func (p *PersistentState) GetLastLogTerm() int {
+	if p != nil {
+		return p.log[p.GetLastLogIndex()].Term
+	}
+	return 0
+}
+
 // VolatileState is the state that need not be saved to stable storage
 type VolatileState struct {
+	commitIndex int
+	// lastApplied int
+}
+
+// func (v *VolatileState) IncrementLastApplied() {
+// 	if v != nil {
+// 		v.lastApplied++
+// 	}
+// }
+
+// func (v *VolatileState) GetLastApplied() int {
+// 	if v != nil {
+// 		return v.lastApplied
+// 	}
+// 	return 0
+// }
+
+func (v *VolatileState) GetCommitIndex() int {
+	if v != nil {
+		return v.commitIndex
+	}
+	return 0
+}
+
+func (v *VolatileState) IncrementCommitIndex() {
+	if v != nil {
+		v.commitIndex++
+	}
+}
+
+func (v *VolatileState) SetCommitIndex(commitIndex int) {
+	if v != nil {
+		v.commitIndex = commitIndex
+	}
 }
 
 func NewVolatileState() *VolatileState {
-	return &VolatileState{}
+	return &VolatileState{
+		commitIndex: 0,
+		// lastApplied: 0,
+	}
 }
