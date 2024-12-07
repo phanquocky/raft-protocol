@@ -2,6 +2,15 @@
 
 This repository contains an implementation of the Raft consensus algorithm in Go. The project is structured to run multiple server instances that communicate with each other to maintain a consistent state.
 
+## Main Objectives
+This repository is a simple implementation of the Raft consensus algorithm. The main objectives are:
+- Implement the Raft consensus algorithm in Go.
+- Understand the core components of the Raft algorithm.
+- Build a distributed system that can maintain a consistent state across multiple servers.
+- Learn how to handle leader election, log replication, and commit operations in a distributed system.
+- Explore the challenges of building a distributed system and maintaining consistency across multiple servers.
+- Gain practical experience with the Raft consensus algorithm and its implementation.
+
 ## Getting Started
 
 ### Prerequisites
